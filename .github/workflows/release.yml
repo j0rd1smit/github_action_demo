@@ -1,9 +1,13 @@
 name: release
 
 on:
-  push:
+  workflow_run:
+    workflows: [ "test" ]
+    branches: [ main ]
     paths:
-      - ".github/workflows/release.yml"
+      - ".github/workflows/test.yml"
+    types:
+      - completed
 
 jobs:
   test-packages:

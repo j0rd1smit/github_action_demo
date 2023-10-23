@@ -1,8 +1,30 @@
 name: test
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
+  init:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.get_env.outputs.env }}
+    steps:
+      - id: get_env
+        run: |
+          if [[ '${{ github.head_ref || github.ref_name }}' == 'main' ]]; then
+            echo "env=Development" >> $GITHUB_OUTPUT # TODO replace with Production when infrastructure is ready
+          elif [[ '${{ github.head_ref || github.ref_name }}' == 'uat' ]]; then
+            # TODO
+            echo "env=Development" >> $GITHUB_OUTPUT # TODO replace with Acceptance when infrastructure is ready
+          elif [[ '${{ github.head_ref || github.ref_name }}' == 'dev' ]]; then
+            echo "env=Development" >> $GITHUB_OUTPUT
+          else
+            echo "Unknown environment: ${{ github.head_ref || github.ref_name }}"
+            exit 1
+          fi
+
   test-packages:
     runs-on: ubuntu-latest
     steps:
@@ -10,6 +32,10 @@ jobs:
       - name: test packages
         run: |
           echo "test packages"
+
+      - name: echo env
+        run: |
+          echo ${{needs.init.outputs.environment}}
 
       - uses: dorny/paths-filter@v2
         id: changes

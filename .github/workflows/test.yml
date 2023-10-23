@@ -14,10 +14,10 @@ jobs:
       - id: get_env
         run: |
           if [[ '${{ github.head_ref || github.ref_name }}' == 'main' ]]; then
-            echo "env=Development" >> $GITHUB_OUTPUT # TODO replace with Production when infrastructure is ready
+            echo "env=production" >> $GITHUB_OUTPUT # TODO replace with Production when infrastructure is ready
           elif [[ '${{ github.head_ref || github.ref_name }}' == 'uat' ]]; then
             # TODO
-            echo "env=Development" >> $GITHUB_OUTPUT # TODO replace with Acceptance when infrastructure is ready
+            echo "env=acceptance" >> $GITHUB_OUTPUT # TODO replace with Acceptance when infrastructure is ready
           elif [[ '${{ github.head_ref || github.ref_name }}' == 'dev' ]]; then
             echo "env=Development" >> $GITHUB_OUTPUT
           else

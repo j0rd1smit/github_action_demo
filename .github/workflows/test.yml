@@ -3,11 +3,11 @@ name: test
 on:
   push:
   pull_request:
+  workflow_dispatch:
     branches:
       - main
       - uat
       - dev
-  workflow_dispatch:
 
 jobs:
   init:
